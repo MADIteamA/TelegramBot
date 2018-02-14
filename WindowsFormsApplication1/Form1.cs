@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -119,37 +119,49 @@ namespace WindowsFormsApplication1
                             switch (stageM)
                             {
                                 case 0:
-                                    await Bot.SendTextMessageAsync(message.Chat.Id, "Привет!\nЯ Миша.\nЯ постараюсь быть тебе другом.\nРасскажи немного о себе");
+                                    await Bot.SendTextMessageAsync(message.Chat.Id, "Привет, "+message.From.FirstName+ "!\nЯ Миша.\nЯ постараюсь быть тебе другом.\nРасскажи немного о себе😊");
                                     var keyboard = new Telegram.Bot.Types.ReplyMarkups.ReplyKeyboardMarkup
                                     {
                                         Keyboard = new[] {
                                                 new[] // row 1
                                                 {
-                                                    new Telegram.Bot.Types.KeyboardButton("Мужской"),
-                                                    new Telegram.Bot.Types.KeyboardButton("Женский")
+                                                    new Telegram.Bot.Types.KeyboardButton("👨Мужской"),
+                                                    new Telegram.Bot.Types.KeyboardButton("👱‍♀Женский")
                                                 },
                                             },
                                         ResizeKeyboard = true,
-                                        OneTimeKeyboard=true
+                                        OneTimeKeyboard = true
                                     };
 
                                     await Bot.SendTextMessageAsync(message.Chat.Id, "Укажи свой пол", ParseMode.Default, false, false, 0, keyboard);
                                     stageM++;
                                     break;
                                 case 1:
-                                    persons[index].temperament = message.Text;
+                                    if (message.Text == "👨Мужской")
+                                    {
+                                        persons[index].gender = 1;
+                                    }
+                                    else if (message.Text == "👱‍♀Женский")
+                                    {
+                                        persons[index].gender = 2;
+                                    }
+                                    else
+                                    {
+                                        stageM--;
+                                        break;
+                                    }
                                     var keyboard1 = new Telegram.Bot.Types.ReplyMarkups.ReplyKeyboardMarkup
                                     {
                                         Keyboard = new[] {
                                                 new[] // row 1
                                                 {
-                                                    new Telegram.Bot.Types.KeyboardButton("Хорошо"),
-                                                    new Telegram.Bot.Types.KeyboardButton("Плохо"),
-                                                    new Telegram.Bot.Types.KeyboardButton("Не очень")
+                                                    new Telegram.Bot.Types.KeyboardButton("👍Хорошо"),
+                                                    new Telegram.Bot.Types.KeyboardButton("😞Плохо"),
+                                                    new Telegram.Bot.Types.KeyboardButton("😐Не очень")
                                                 },
                                             },
                                         ResizeKeyboard = true,
-                                        OneTimeKeyboard=true
+                                        OneTimeKeyboard = true
                                     };
 
                                     await Bot.SendTextMessageAsync(message.Chat.Id, "Как прошел твой день?", ParseMode.Default, false, false, 0, keyboard1);
@@ -169,10 +181,10 @@ namespace WindowsFormsApplication1
                                                 },
                                             },
                                         ResizeKeyboard = true,
-                                        OneTimeKeyboard=true
+                                        OneTimeKeyboard = true
                                     };
 
-                                    await Bot.SendTextMessageAsync(message.Chat.Id, "Что заполнилось тебе за этот день?", ParseMode.Default, false, false, 0, keyboard2);
+                                    await Bot.SendTextMessageAsync(message.Chat.Id, "Что запомнилось тебе за этот день?", ParseMode.Default, false, false, 0, keyboard2);
                                     stageM++;
                                     break;
                                 case 3:
@@ -203,13 +215,42 @@ namespace WindowsFormsApplication1
                                 case 5:
                                     persons[index].answer4 = message.Text;
 
-                                    await Bot.SendTextMessageAsync(message.Chat.Id, "У тебя есть чем поделиться со мной, если нет, то до завтра.");
-                                   stageM++;
-                                   break;
+                                    await Bot.SendTextMessageAsync(message.Chat.Id, "У тебя есть чем поделиться со мной?");
+                                    stageM++;
+                                    break;
                                 case 6:
-                                    persons[index].answer5 += message.Text;
+                                    persons[index].answer4 = message.Text;
+                                    var keyboard5 = new Telegram.Bot.Types.ReplyMarkups.ReplyKeyboardMarkup
+                                    {
+                                        Keyboard = new[] {
+                                                new[] // row 1
+                                                {
+                                                    new Telegram.Bot.Types.KeyboardButton("Да"),
+                                                    new Telegram.Bot.Types.KeyboardButton("Нет"),
 
+                                                },
+                                            },
+                                        ResizeKeyboard = true,
+                                        OneTimeKeyboard = true
+                                    };
+                                    await Bot.SendTextMessageAsync(message.Chat.Id, "У тебя есть чем поделиться со мной?", ParseMode.Default, false, false, 0, keyboard5);
+                                    stageM++;
+                                    break;
+                                case 7:
+                                    if (message.Text.ToLower() == "нет")
+                                    {
+                                        await Bot.SendTextMessageAsync(message.Chat.Id, "До завтра!");
+                                    }else if (message.Text.ToLower() == "да")
                                     
+                                    {
+                                        await Bot.SendTextMessageAsync(message.Chat.Id, "Излагай свои мысли");
+                                    }
+                                    break;
+                                case 8:
+                                    
+                                    persons[index].answer5 += message.Text + Environment.NewLine;
+
+
                                     break;
 
                             };
