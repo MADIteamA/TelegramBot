@@ -129,7 +129,8 @@ namespace WindowsFormsApplication1
                                                     new Telegram.Bot.Types.KeyboardButton("Женский")
                                                 },
                                             },
-                                        ResizeKeyboard = true
+                                        ResizeKeyboard = true,
+                                        OneTimeKeyboard=true
                                     };
 
                                     await Bot.SendTextMessageAsync(message.Chat.Id, "Укажи свой пол", ParseMode.Default, false, false, 0, keyboard);
@@ -147,7 +148,8 @@ namespace WindowsFormsApplication1
                                                     new Telegram.Bot.Types.KeyboardButton("Не очень")
                                                 },
                                             },
-                                        ResizeKeyboard = true
+                                        ResizeKeyboard = true,
+                                        OneTimeKeyboard=true
                                     };
 
                                     await Bot.SendTextMessageAsync(message.Chat.Id, "Как прошел твой день?", ParseMode.Default, false, false, 0, keyboard1);
@@ -166,7 +168,8 @@ namespace WindowsFormsApplication1
                                                                                                         new Telegram.Bot.Types.KeyboardButton("Ничего")
                                                 },
                                             },
-                                        ResizeKeyboard = true
+                                        ResizeKeyboard = true,
+                                        OneTimeKeyboard=true
                                     };
 
                                     await Bot.SendTextMessageAsync(message.Chat.Id, "Что заполнилось тебе за этот день?", ParseMode.Default, false, false, 0, keyboard2);
@@ -201,7 +204,8 @@ namespace WindowsFormsApplication1
                                     persons[index].answer4 = message.Text;
 
                                     await Bot.SendTextMessageAsync(message.Chat.Id, "У тебя есть чем поделиться со мной, если нет, то до завтра.");
-                                    break;
+                                   stageM++;
+                                   break;
                                 case 6:
                                     persons[index].answer5 += message.Text;
 
