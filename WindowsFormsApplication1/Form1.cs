@@ -21,6 +21,9 @@ namespace WindowsFormsApplication1
         public Form1()
         {
             InitializeComponent();
+            if (!File.Exists("databaseBETA.xml")) {
+                File.WriteAllText("databaseBETA.xml", "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + Environment.NewLine + "<root>" + Environment.NewLine + "</root>");
+            }
             XElement xElement = XElement.Load("databaseBETA.xml",
                 LoadOptions.SetBaseUri | LoadOptions.SetLineInfo);
             var database = xElement.Descendants("Person");
